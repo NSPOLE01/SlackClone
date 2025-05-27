@@ -41,6 +41,7 @@
 
 <script>
     const socket = io('http://localhost:8001');
+    const adminSocket = io('http://localhost:8001/admin');
     socket.on('connect', () => {
 
     })
@@ -49,8 +50,16 @@
         console.log(dataFromServer)
     })
 
+    socket.on("welcomeToChatRoom", (data) => {
+        console.log("Welcome to the main chat room")
+    })
+
     socket.on('newMessageToClients',(newMessage)=>{
         document.querySelector('#messages').innerHTML += `<li>${newMessage.text}</li>`
+    })
+
+    adminSocket.on('connect', () => {
+        console.log('Admin connected');
     })
 
     document.querySelector('#message-form').addEventListener('submit', (event)=>{
