@@ -14,7 +14,10 @@ socket.on("nsList", (nsData) => {
   nameSpacesDiv.innerHTML = "";
   nsData.forEach((ns) => {
     nameSpacesDiv.innerHTML += `<div class="namespace" ns="${ns.endpoint}"><img src="${ns.image}" /></div>`;
-    io("http://localhost:9000${ns.endpoint}");
+    const thisNs = io(`http://localhost:9000${ns.endpoint}`);
+    thisNs.on("nsChange", (data) => {
+      console.log("Namespace changed:", data);
+    });
   });
 
   Array.from(document.getElementsByClassName("namespace")).forEach(
