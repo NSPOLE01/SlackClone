@@ -30,7 +30,7 @@ namespaces.forEach((namespace) => {
       const rooms = socket.rooms;
       let i = 0;
       rooms.forEach((room) => {
-        if (i != 0) {
+        if (i !== 0) {
           socket.leave(room);
           i = i + 1;
         }
