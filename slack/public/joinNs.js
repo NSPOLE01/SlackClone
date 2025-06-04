@@ -6,7 +6,11 @@ const joinNs = (element, nsData) => {
   let roomList = document.querySelector(".room-list");
 
   roomList.innerHTML = "";
-  rooms.forEach((room) => {
+  let firstRoom;
+  rooms.forEach((room, i) => {
+    if (i === 0) {
+      firstRoom = room.roomTitle;
+    }
     console.log(room);
     roomList.innerHTML += `<li class="room" namespaceId=${
       room.namespaceId
@@ -14,6 +18,7 @@ const joinNs = (element, nsData) => {
       room.roomTitle
     }</li>`;
   });
+  joinRoom(firstRoom, clickedNs.id);
   const roomNodes = document.querySelectorAll(".room");
   Array.from(roomNodes).forEach((elem) => {
     elem.addEventListener("click", (e) => {

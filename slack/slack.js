@@ -26,8 +26,24 @@ io.on("connection", (socket) => {
 
 namespaces.forEach((namespace) => {
   io.of(namespace.endpoint).on("connection", (socket) => {
-    socket.on("joinRoom", (roomTitle) => {
+    socket.on("joinRoom", async (roomTitle, ackCallBack) => {
+      const rooms = socket.rooms;
+      let i = 0;
+      rooms.forEach((room) => {
+        if (i != 0) {
+          socket.leave(room);
+          i = i + 1;
+        }
+      });
       socket.join(roomTitle);
+      const sockets = await io
+        .of(namespace.endpoint)
+        .in(roomTitle)
+        .fetchSockets();
+      const socketCount = sockets.length;
+      ackCallBack({
+        numUsers: socketCount,
+      });
     });
   });
 });
