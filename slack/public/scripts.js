@@ -37,8 +37,8 @@ socket.on("nsList", (nsData) => {
 
   Array.from(document.getElementsByClassName("namespace")).forEach(
     (element) => {
-      console.log(element);
       element.addEventListener("click", (e) => {
+        console.log(element);
         joinNs(element, nsData);
       });
     }

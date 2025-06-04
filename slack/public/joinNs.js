@@ -7,6 +7,18 @@ const joinNs = (element, nsData) => {
 
   roomList.innerHTML = "";
   rooms.forEach((room) => {
-    roomList.innerHTML += `<li><span class="glyphicon glyphicon-lock"></span>${room.roomTitle}</li>`;
+    console.log(room);
+    roomList.innerHTML += `<li class="room" namespaceId=${
+      room.namespaceId
+    }><span class="fa-solid fa-${room.privateRoom ? "lock" : "globe"}"></span>${
+      room.roomTitle
+    }</li>`;
+  });
+  const roomNodes = document.querySelectorAll(".room");
+  Array.from(roomNodes).forEach((elem) => {
+    elem.addEventListener("click", (e) => {
+      const namespaceId = elem.getAttribute("namespaceId");
+      joinRoom(e.target.innerText, namespaceId);
+    });
   });
 };
