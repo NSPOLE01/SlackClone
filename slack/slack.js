@@ -32,8 +32,8 @@ namespaces.forEach((namespace) => {
       rooms.forEach((room) => {
         if (i !== 0) {
           socket.leave(room);
-          i = i + 1;
         }
+        i++;
       });
       socket.join(roomTitle);
       const sockets = await io
@@ -44,6 +44,12 @@ namespaces.forEach((namespace) => {
       ackCallBack({
         numUsers: socketCount,
       });
+    });
+    socket.on("newMessageToRoom", (data) => {
+      console.log(data);
+      const rooms = socket.rooms;
+      const currentRoom = [...rooms][1];
+      io.of(namespace.endpoint).in(currentRoom).emit("messageToRoom", data);
     });
   });
 });

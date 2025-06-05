@@ -6,7 +6,22 @@ const socket = io("http://localhost:9000");
 const nameSpaceSockets = [];
 const listeners = {
   nsChange: [],
+  messageToRoom: [],
 };
+
+let selectedNsId = 0;
+
+document.querySelector("#message-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const newMessage = document.querySelector("#user-message").value;
+  console.log(newMessage, selectedNsId);
+  nameSpaceSockets[selectedNsId].emit("newMessageToRoom", {
+    newMessage,
+    date: Date.now(),
+    avatar: "https://via.placeholder.com/30",
+    userName,
+  });
+});
 
 const addListeners = (nsId) => {
   if (!listeners.nsChange[nsId]) {
@@ -14,6 +29,12 @@ const addListeners = (nsId) => {
       console.log("Namespace changed:", data);
     });
     listeners.nsChange[nsId] = true;
+  }
+  if (!listeners.messageToRoom[nsId]) {
+    nameSpaceSockets[nsId].on("messageToRoom", (data) => {
+      console.log(data);
+    });
+    listeners.messageToRoom[nsId] = true;
   }
 };
 
