@@ -20,7 +20,9 @@ document.querySelector("#message-form").addEventListener("submit", (e) => {
     date: Date.now(),
     avatar: "https://via.placeholder.com/30",
     userName,
+    selectedNsId,
   });
+  document.querySelector("#user-message").value = "";
 });
 
 const addListeners = (nsId) => {
@@ -33,6 +35,7 @@ const addListeners = (nsId) => {
   if (!listeners.messageToRoom[nsId]) {
     nameSpaceSockets[nsId].on("messageToRoom", (data) => {
       console.log(data);
+      document.querySelector("#messages").innerHTML += buildMessage(data);
     });
     listeners.messageToRoom[nsId] = true;
   }
@@ -66,3 +69,16 @@ socket.on("nsList", (nsData) => {
   );
   joinNs(document.getElementsByClassName("namespace")[0], nsData);
 });
+
+const buildMessage = (data) =>
+  ` <li>
+    <div class="user-image">
+      <img src="${data.avatar}" />
+    </div>
+    <div class="user-message">
+      <div class="user-name-time">
+        ${data.userName} <span>${new Date(data.date).toLocaleString()}</span>
+      </div>
+      <div class="message-text">${data.newMessage}</div>
+    </div>
+  </li>`;
